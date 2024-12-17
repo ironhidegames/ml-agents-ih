@@ -5,6 +5,8 @@ import numpy as np
 
 from mlagents.trainers.torch_entities.encoders import (
     SimpleVisualEncoder,
+    CNN2x24Encoder,
+    CNN3x32Encoder,
     ResNetVisualEncoder,
     NatureVisualEncoder,
     SmallVisualEncoder,
@@ -27,6 +29,8 @@ class ModelUtils:
         EncoderType.FULLY_CONNECTED: 1,
         EncoderType.MATCH3: 5,
         EncoderType.SIMPLE: 20,
+        EncoderType.CNN2x24: 4,
+        EncoderType.CNN3x32: 4,
         EncoderType.NATURE_CNN: 36,
         EncoderType.RESNET: 15,
     }
@@ -125,6 +129,8 @@ class ModelUtils:
     def get_encoder_for_type(encoder_type: EncoderType) -> nn.Module:
         ENCODER_FUNCTION_BY_TYPE = {
             EncoderType.SIMPLE: SimpleVisualEncoder,
+            EncoderType.CCN2x24: CNN2x24Encoder,
+            EncoderType.CCN3x32: CNN3x32Encoder,
             EncoderType.NATURE_CNN: NatureVisualEncoder,
             EncoderType.RESNET: ResNetVisualEncoder,
             EncoderType.MATCH3: SmallVisualEncoder,

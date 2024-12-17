@@ -207,6 +207,82 @@ class SimpleVisualEncoder(nn.Module):
         hidden = hidden.reshape(-1, self.final_flat)
         return self.dense(hidden)
 
+class CNN2x24Encoder(nn.Module):
+    def __init__(
+        self, height: int, width: int, initial_channels: int, output_size: int
+    ):
+        super().__init__()
+        ksize = 3
+        hidden_channels = 24
+        final_channels = hidden_channels
+        self.h_size = output_size
+        conv_1_hw = conv_output_shape((height, width), ksize, 1, 1)
+        conv_2_hw = conv_output_shape(conv_1_hw, ksize, 1, 1)        
+        self.final_flat = conv_2_hw[0] * conv_2_hw[1] * final_channels
+
+        self.conv_layers = nn.Sequential(
+            nn.Conv2d(initial_channels, hidden_channels, [ksize,ksize], [1, 1], 1),
+            nn.LeakyReLU(),
+            nn.Conv2d(hidden_channels, final_channels, [ksize,ksize], [1, 1], 1),
+            nn.LeakyReLU(),
+        )
+        self.dense = nn.Sequential(
+            linear_layer(
+                self.final_flat,
+                self.h_size,
+                kernel_init=Initialization.KaimingHeNormal,
+                kernel_gain=1.41,  # Use ReLU gain
+            ),
+            nn.LeakyReLU(),
+        )
+
+    def forward(self, visual_obs: torch.Tensor) -> torch.Tensor:
+        if not exporting_to_onnx.is_exporting():
+            visual_obs = visual_obs.permute([0, 3, 1, 2])
+        hidden = self.conv_layers(visual_obs)
+        hidden = hidden.reshape(-1, self.final_flat)
+        return self.dense(hidden)
+
+class CNN3x32Encoder(nn.Module):
+    def __init__(
+        self, height: int, width: int, initial_channels: int, output_size: int
+    ):
+        super().__init__()
+        ksize = 3
+        hidden_channels = 32
+        final_channels = hidden_channels
+        self.h_size = output_size
+        conv_1_hw = conv_output_shape((height, width), ksize, 1, 1)
+        conv_2_hw = conv_output_shape(conv_1_hw, ksize, 1, 1)
+        conv_3_hw = conv_output_shape(conv_2_hw, ksize, 1, 1)        
+        self.final_flat = conv_3_hw[0] * conv_3_hw[1] * final_channels
+
+        print("height:%s width:%s chan:%s out:%s -> conv_1_hw:%s conv_2_hw:%s conv_3_hw:%s final_flat:%s" % (height, width, initial_channels, output_size, conv_1_hw, conv_2_hw, conv_3_hw, self.final_flat))
+
+        self.conv_layers = nn.Sequential(
+            nn.Conv2d(initial_channels, hidden_channels, [ksize,ksize], [1, 1], 1),
+            nn.LeakyReLU(),
+            nn.Conv2d(hidden_channels, hidden_channels, [ksize,ksize], [1, 1], 1),
+            nn.LeakyReLU(),
+            nn.Conv2d(hidden_channels, final_channels, [ksize,ksize], [1, 1], 1),
+            nn.LeakyReLU(),
+        )
+        self.dense = nn.Sequential(
+            linear_layer(
+                self.final_flat,
+                self.h_size,
+                kernel_init=Initialization.KaimingHeNormal,
+                kernel_gain=1.41,  # Use ReLU gain
+            ),
+            nn.LeakyReLU(),
+        )
+
+    def forward(self, visual_obs: torch.Tensor) -> torch.Tensor:
+        if not exporting_to_onnx.is_exporting():
+            visual_obs = visual_obs.permute([0, 3, 1, 2])
+        hidden = self.conv_layers(visual_obs)
+        hidden = hidden.reshape(-1, self.final_flat)
+        return self.dense(hidden)    
 
 class NatureVisualEncoder(nn.Module):
     def __init__(
