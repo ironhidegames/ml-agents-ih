@@ -98,6 +98,8 @@ class EncoderType(Enum):
     FULLY_CONNECTED = "fully_connected"
     MATCH3 = "match3"
     SIMPLE = "simple"
+    CNN2x24 = "cnn_2x24"
+    CNN3x32 = "cnn_3x32"
     NATURE_CNN = "nature_cnn"
     RESNET = "resnet"
 
