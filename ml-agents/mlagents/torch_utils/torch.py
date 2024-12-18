@@ -54,6 +54,8 @@ def set_torch_config(torch_settings: TorchSettings) -> None:
     if _device.type == "cuda":
         torch.set_default_device(_device.type)
         torch.set_default_dtype(torch.float32)
+    elif _device.type == "mps":
+        torch.set_default_device(device_str)
     else:
         torch.set_default_dtype(torch.float32)
     logger.debug(f"default Torch device: {_device}")
