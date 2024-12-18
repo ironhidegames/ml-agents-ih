@@ -129,8 +129,8 @@ class ModelUtils:
     def get_encoder_for_type(encoder_type: EncoderType) -> nn.Module:
         ENCODER_FUNCTION_BY_TYPE = {
             EncoderType.SIMPLE: SimpleVisualEncoder,
-            EncoderType.CCN2x24: CNN2x24Encoder,
-            EncoderType.CCN3x32: CNN3x32Encoder,
+            EncoderType.CNN2x24: CNN2x24Encoder,
+            EncoderType.CNN3x32: CNN3x32Encoder,
             EncoderType.NATURE_CNN: NatureVisualEncoder,
             EncoderType.RESNET: ResNetVisualEncoder,
             EncoderType.MATCH3: SmallVisualEncoder,
