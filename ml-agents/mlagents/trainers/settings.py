@@ -103,9 +103,10 @@ class EncoderType(Enum):
     CNN4x16 = "cnn_4x16"
     CNN2x24 = "cnn_2x24"
     CNN3x32 = "cnn_3x32"
+    CNN3x48 = "cnn_3x48"
+    CNN4x48 = "cnn_4x48"
     NATURE_CNN = "nature_cnn"
     RESNET = "resnet"
-
 
 class ScheduleType(Enum):
     CONSTANT = "constant"
