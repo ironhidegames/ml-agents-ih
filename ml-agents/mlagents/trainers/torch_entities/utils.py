@@ -145,7 +145,7 @@ class ModelUtils:
             EncoderType.CNN2x24: CNN2x24Encoder,
             EncoderType.CNN3x32: CNN3x32Encoder,
             EncoderType.CNN3x48: CNN3x48Encoder,
-            EncoderType.CNN3x48: CNN4x48Encoder,
+            EncoderType.CNN4x48: CNN4x48Encoder,
             EncoderType.NATURE_CNN: NatureVisualEncoder,
             EncoderType.RESNET: ResNetVisualEncoder,
             EncoderType.MATCH3: SmallVisualEncoder,
