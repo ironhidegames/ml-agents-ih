@@ -103,8 +103,12 @@ class EncoderType(Enum):
     CNN4x16 = "cnn_4x16"
     CNN2x24 = "cnn_2x24"
     CNN3x32 = "cnn_3x32"
+    CNN6x32 = "cnn_6x32"
+    CNN8x32 = "cnn_8x32"
     CNN3x48 = "cnn_3x48"
     CNN4x48 = "cnn_4x48"
+    CNN6x48 = "cnn_6x48"
+    CNN8x48 = "cnn_8x48"
     NATURE_CNN = "nature_cnn"
     RESNET = "resnet"
 

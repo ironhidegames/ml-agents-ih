@@ -401,6 +401,150 @@ class CNN3x32Encoder(nn.Module):
         hidden = hidden.reshape(-1, self.final_flat)
         return self.dense(hidden)    
 
+class CNN4x32Encoder(nn.Module):
+    def __init__(
+        self, height: int, width: int, initial_channels: int, output_size: int
+    ):
+        super().__init__()
+        ksize = 3
+        hidden_channels = 32
+        final_channels = hidden_channels
+        self.h_size = output_size
+        conv_1_hw = conv_output_shape((height, width), ksize, 1, 1)
+        conv_2_hw = conv_output_shape(conv_1_hw, ksize, 1, 1)
+        conv_3_hw = conv_output_shape(conv_2_hw, ksize, 1, 1)
+        conv_4_hw = conv_output_shape(conv_3_hw, ksize, 1, 1)
+        self.final_flat = conv_4_hw[0] * conv_4_hw[1] * final_channels
+
+        self.conv_layers = nn.Sequential(
+            nn.Conv2d(initial_channels, hidden_channels, [ksize,ksize], [1, 1], 1),
+            nn.LeakyReLU(),
+            nn.Conv2d(hidden_channels, hidden_channels, [ksize,ksize], [1, 1], 1),
+            nn.LeakyReLU(),
+            nn.Conv2d(hidden_channels, hidden_channels, [ksize,ksize], [1, 1], 1),
+            nn.LeakyReLU(),
+            nn.Conv2d(hidden_channels, final_channels, [ksize,ksize], [1, 1], 1),
+            nn.LeakyReLU(),
+        )
+        self.dense = nn.Sequential(
+            linear_layer(
+                self.final_flat,
+                self.h_size,
+                kernel_init=Initialization.KaimingHeNormal,
+                kernel_gain=1.41,  # Use ReLU gain
+            ),
+            nn.LeakyReLU(),
+        )
+
+    def forward(self, visual_obs: torch.Tensor) -> torch.Tensor:
+        if not exporting_to_onnx.is_exporting():
+            visual_obs = visual_obs.permute([0, 3, 1, 2])
+        hidden = self.conv_layers(visual_obs)
+        hidden = hidden.reshape(-1, self.final_flat)
+        return self.dense(hidden)
+
+class CNN6x32Encoder(nn.Module):
+    def __init__(
+        self, height: int, width: int, initial_channels: int, output_size: int
+    ):
+        super().__init__()
+        ksize = 3
+        hidden_channels = 32
+        final_channels = hidden_channels
+        self.h_size = output_size
+        conv_1_hw = conv_output_shape((height, width), ksize, 1, 1)
+        conv_2_hw = conv_output_shape(conv_1_hw, ksize, 1, 1)
+        conv_3_hw = conv_output_shape(conv_2_hw, ksize, 1, 1)
+        conv_4_hw = conv_output_shape(conv_3_hw, ksize, 1, 1)
+        conv_5_hw = conv_output_shape(conv_4_hw, ksize, 1, 1)
+        conv_6_hw = conv_output_shape(conv_5_hw, ksize, 1, 1)
+        self.final_flat = conv_6_hw[0] * conv_6_hw[1] * final_channels
+
+        self.conv_layers = nn.Sequential(
+            nn.Conv2d(initial_channels, hidden_channels, [ksize,ksize], [1, 1], 1),
+            nn.LeakyReLU(),
+            nn.Conv2d(hidden_channels, hidden_channels, [ksize,ksize], [1, 1], 1),
+            nn.LeakyReLU(),
+            nn.Conv2d(hidden_channels, hidden_channels, [ksize,ksize], [1, 1], 1),
+            nn.LeakyReLU(),
+            nn.Conv2d(hidden_channels, hidden_channels, [ksize,ksize], [1, 1], 1),
+            nn.LeakyReLU(),
+            nn.Conv2d(hidden_channels, hidden_channels, [ksize,ksize], [1, 1], 1),
+            nn.LeakyReLU(),
+            nn.Conv2d(hidden_channels, final_channels, [ksize,ksize], [1, 1], 1),
+            nn.LeakyReLU(),
+        )
+        self.dense = nn.Sequential(
+            linear_layer(
+                self.final_flat,
+                self.h_size,
+                kernel_init=Initialization.KaimingHeNormal,
+                kernel_gain=1.41,  # Use ReLU gain
+            ),
+            nn.LeakyReLU(),
+        )
+
+    def forward(self, visual_obs: torch.Tensor) -> torch.Tensor:
+        if not exporting_to_onnx.is_exporting():
+            visual_obs = visual_obs.permute([0, 3, 1, 2])
+        hidden = self.conv_layers(visual_obs)
+        hidden = hidden.reshape(-1, self.final_flat)
+        return self.dense(hidden)
+
+class CNN8x32Encoder(nn.Module):
+    def __init__(
+        self, height: int, width: int, initial_channels: int, output_size: int
+    ):
+        super().__init__()
+        ksize = 3
+        hidden_channels = 32
+        final_channels = hidden_channels
+        self.h_size = output_size
+        conv_1_hw = conv_output_shape((height, width), ksize, 1, 1)
+        conv_2_hw = conv_output_shape(conv_1_hw, ksize, 1, 1)
+        conv_3_hw = conv_output_shape(conv_2_hw, ksize, 1, 1)
+        conv_4_hw = conv_output_shape(conv_3_hw, ksize, 1, 1)
+        conv_5_hw = conv_output_shape(conv_4_hw, ksize, 1, 1)
+        conv_6_hw = conv_output_shape(conv_5_hw, ksize, 1, 1)
+        conv_7_hw = conv_output_shape(conv_6_hw, ksize, 1, 1)
+        conv_8_hw = conv_output_shape(conv_7_hw, ksize, 1, 1)
+        self.final_flat = conv_8_hw[0] * conv_8_hw[1] * final_channels
+
+        self.conv_layers = nn.Sequential(
+            nn.Conv2d(initial_channels, hidden_channels, [ksize,ksize], [1, 1], 1),
+            nn.LeakyReLU(),
+            nn.Conv2d(hidden_channels, hidden_channels, [ksize,ksize], [1, 1], 1),
+            nn.LeakyReLU(),
+            nn.Conv2d(hidden_channels, hidden_channels, [ksize,ksize], [1, 1], 1),
+            nn.LeakyReLU(),
+            nn.Conv2d(hidden_channels, hidden_channels, [ksize,ksize], [1, 1], 1),
+            nn.LeakyReLU(),
+            nn.Conv2d(hidden_channels, hidden_channels, [ksize,ksize], [1, 1], 1),
+            nn.LeakyReLU(),
+            nn.Conv2d(hidden_channels, hidden_channels, [ksize,ksize], [1, 1], 1),
+            nn.LeakyReLU(),
+            nn.Conv2d(hidden_channels, hidden_channels, [ksize,ksize], [1, 1], 1),
+            nn.LeakyReLU(),
+            nn.Conv2d(hidden_channels, final_channels, [ksize,ksize], [1, 1], 1),
+            nn.LeakyReLU(),
+        )
+        self.dense = nn.Sequential(
+            linear_layer(
+                self.final_flat,
+                self.h_size,
+                kernel_init=Initialization.KaimingHeNormal,
+                kernel_gain=1.41,  # Use ReLU gain
+            ),
+            nn.LeakyReLU(),
+        )
+
+    def forward(self, visual_obs: torch.Tensor) -> torch.Tensor:
+        if not exporting_to_onnx.is_exporting():
+            visual_obs = visual_obs.permute([0, 3, 1, 2])
+        hidden = self.conv_layers(visual_obs)
+        hidden = hidden.reshape(-1, self.final_flat)
+        return self.dense(hidden)
+
 class CNN3x48Encoder(nn.Module):
     def __init__(
         self, height: int, width: int, initial_channels: int, output_size: int
@@ -482,8 +626,110 @@ class CNN4x48Encoder(nn.Module):
             visual_obs = visual_obs.permute([0, 3, 1, 2])
         hidden = self.conv_layers(visual_obs)
         hidden = hidden.reshape(-1, self.final_flat)
-        return self.dense(hidden)    
-    
+        return self.dense(hidden)
+
+class CNN6x48Encoder(nn.Module):
+    def __init__(
+        self, height: int, width: int, initial_channels: int, output_size: int
+    ):
+        super().__init__()
+        ksize = 3
+        hidden_channels = 48
+        final_channels = hidden_channels
+        self.h_size = output_size
+        conv_1_hw = conv_output_shape((height, width), ksize, 1, 1)
+        conv_2_hw = conv_output_shape(conv_1_hw, ksize, 1, 1)
+        conv_3_hw = conv_output_shape(conv_2_hw, ksize, 1, 1)
+        conv_4_hw = conv_output_shape(conv_3_hw, ksize, 1, 1)
+        conv_5_hw = conv_output_shape(conv_4_hw, ksize, 1, 1)
+        conv_6_hw = conv_output_shape(conv_5_hw, ksize, 1, 1)
+        self.final_flat = conv_6_hw[0] * conv_6_hw[1] * final_channels
+
+        self.conv_layers = nn.Sequential(
+            nn.Conv2d(initial_channels, hidden_channels, [ksize,ksize], [1, 1], 1),
+            nn.LeakyReLU(),
+            nn.Conv2d(hidden_channels, hidden_channels, [ksize,ksize], [1, 1], 1),
+            nn.LeakyReLU(),
+            nn.Conv2d(hidden_channels, hidden_channels, [ksize,ksize], [1, 1], 1),
+            nn.LeakyReLU(),
+            nn.Conv2d(hidden_channels, hidden_channels, [ksize,ksize], [1, 1], 1),
+            nn.LeakyReLU(),
+            nn.Conv2d(hidden_channels, hidden_channels, [ksize,ksize], [1, 1], 1),
+            nn.LeakyReLU(),
+            nn.Conv2d(hidden_channels, final_channels, [ksize,ksize], [1, 1], 1),
+            nn.LeakyReLU(),
+        )
+        self.dense = nn.Sequential(
+            linear_layer(
+                self.final_flat,
+                self.h_size,
+                kernel_init=Initialization.KaimingHeNormal,
+                kernel_gain=1.41,  # Use ReLU gain
+            ),
+            nn.LeakyReLU(),
+        )
+
+    def forward(self, visual_obs: torch.Tensor) -> torch.Tensor:
+        if not exporting_to_onnx.is_exporting():
+            visual_obs = visual_obs.permute([0, 3, 1, 2])
+        hidden = self.conv_layers(visual_obs)
+        hidden = hidden.reshape(-1, self.final_flat)
+        return self.dense(hidden)
+
+class CNN8x48Encoder(nn.Module):
+    def __init__(
+        self, height: int, width: int, initial_channels: int, output_size: int
+    ):
+        super().__init__()
+        ksize = 3
+        hidden_channels = 48
+        final_channels = hidden_channels
+        self.h_size = output_size
+        conv_1_hw = conv_output_shape((height, width), ksize, 1, 1)
+        conv_2_hw = conv_output_shape(conv_1_hw, ksize, 1, 1)
+        conv_3_hw = conv_output_shape(conv_2_hw, ksize, 1, 1)
+        conv_4_hw = conv_output_shape(conv_3_hw, ksize, 1, 1)
+        conv_5_hw = conv_output_shape(conv_4_hw, ksize, 1, 1)
+        conv_6_hw = conv_output_shape(conv_5_hw, ksize, 1, 1)
+        conv_7_hw = conv_output_shape(conv_6_hw, ksize, 1, 1)
+        conv_8_hw = conv_output_shape(conv_7_hw, ksize, 1, 1)
+        self.final_flat = conv_8_hw[0] * conv_8_hw[1] * final_channels
+
+        self.conv_layers = nn.Sequential(
+            nn.Conv2d(initial_channels, hidden_channels, [ksize,ksize], [1, 1], 1),
+            nn.LeakyReLU(),
+            nn.Conv2d(hidden_channels, hidden_channels, [ksize,ksize], [1, 1], 1),
+            nn.LeakyReLU(),
+            nn.Conv2d(hidden_channels, hidden_channels, [ksize,ksize], [1, 1], 1),
+            nn.LeakyReLU(),
+            nn.Conv2d(hidden_channels, hidden_channels, [ksize,ksize], [1, 1], 1),
+            nn.LeakyReLU(),
+            nn.Conv2d(hidden_channels, hidden_channels, [ksize,ksize], [1, 1], 1),
+            nn.LeakyReLU(),
+            nn.Conv2d(hidden_channels, hidden_channels, [ksize,ksize], [1, 1], 1),
+            nn.LeakyReLU(),
+            nn.Conv2d(hidden_channels, hidden_channels, [ksize,ksize], [1, 1], 1),
+            nn.LeakyReLU(),
+            nn.Conv2d(hidden_channels, final_channels, [ksize,ksize], [1, 1], 1),
+            nn.LeakyReLU(),
+        )
+        self.dense = nn.Sequential(
+            linear_layer(
+                self.final_flat,
+                self.h_size,
+                kernel_init=Initialization.KaimingHeNormal,
+                kernel_gain=1.41,  # Use ReLU gain
+            ),
+            nn.LeakyReLU(),
+        )
+
+    def forward(self, visual_obs: torch.Tensor) -> torch.Tensor:
+        if not exporting_to_onnx.is_exporting():
+            visual_obs = visual_obs.permute([0, 3, 1, 2])
+        hidden = self.conv_layers(visual_obs)
+        hidden = hidden.reshape(-1, self.final_flat)
+        return self.dense(hidden)
+
 class NatureVisualEncoder(nn.Module):
     def __init__(
         self, height: int, width: int, initial_channels: int, output_size: int
